@@ -1,1 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pesquisa para Pastores</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --primary: #1f4b99;
+      --primary-dark: #15356d;
+      --text: #1d2433;
+      --muted: #667085;
+      --border: #dbe2ea;
+      --success: #117a37;
+      --shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef3fb 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 16px;
+    }
+
+    .hero, .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(219, 226, 234, 0.8);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #1f4b99 0%, #335fb3 100%);
+      color: #fff;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.92);
+    }
+
+    form.card {
+      padding: 24px;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 0 0 18px;
+    }
+
+    legend {
+      padding: 0 10px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .question {
+      margin-bottom: 18px;
+    }
+
+    .question:last-child {
+      margin-bottom: 0;
+    }
+
+    label.title {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .hint {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(31, 75, 153, 0.1);
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .inline-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fafcff;
+    }
+
+    .inline-option input {
+      margin-top: 2px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #e9eef8;
+      color: var(--primary-dark);
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: #edf9f0;
+      color: var(--success);
+      border: 1px solid #b7e4c7;
+    }
+
+    .status.error {
+      display: block;
+      background: #fff2f2;
+      color: #b42318;
+      border: 1px solid #f5c2c7;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      form.card, .hero {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Pesquisa para Desenvolvimento de Sistema de Gestão para Igrejas</h1>
+      <p>
+        Esta pesquisa tem como objetivo entender melhor as necessidades das igrejas em relação à organização administrativa e gestão de membros.
+        Suas respostas ajudarão a criar uma ferramenta realmente útil para o ministério.
+      </p>
+    </section>
+
+    <form id="surveyForm" class="card">
+      <fieldset>
+        <legend>1. Informações da Igreja</legend>
+
+        <div class="question">
+          <label class="title">1. Qual é o seu cargo na igreja?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="cargo" value="Pastor" required> Pastor</label>
+            <label class="inline-option"><input type="radio" name="cargo" value="Líder de ministério"> Líder de ministério</label>
+            <label class="inline-option"><input type="radio" name="cargo" value="Administrador"> Administrador</label>
+            <label class="inline-option"><input type="radio" name="cargo" value="Secretário"> Secretário</label>
+            <label class="inline-option"><input type="radio" name="cargo" value="Outro"> Outro</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="title" for="membros">2. Quantos membros aproximadamente tem sua igreja?</label>
+          <select id="membros" name="membros" required>
+            <option value="">Selecione</option>
+            <option>Até 50</option>
+            <option>50 a 100</option>
+            <option>100 a 300</option>
+            <option>300 a 500</option>
+            <option>Mais de 500</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <label class="title">3. A igreja possui mais de uma unidade ou campus?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="multicampus" value="Sim" required> Sim</label>
+            <label class="inline-option"><input type="radio" name="multicampus" value="Não"> Não</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Gestão Atual da Igreja</legend>
+
+        <div class="question">
+          <label class="title">4. Como a igreja organiza as informações hoje?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="organizacao" value="Planilhas" required> Planilhas (Excel ou Google Sheets)</label>
+            <label class="inline-option"><input type="radio" name="organizacao" value="Caderno"> Caderno ou registros físicos</label>
+            <label class="inline-option"><input type="radio" name="organizacao" value="Sistema específico"> Sistema específico para igrejas</label>
+            <label class="inline-option"><input type="radio" name="organizacao" value="Aplicativos diversos"> Aplicativos diversos</label>
+            <label class="inline-option"><input type="radio" name="organizacao" value="Sem organização"> Não possui organização estruturada</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="title">5. Quais áreas são mais difíceis de organizar hoje?</label>
+          <span class="hint">Pode marcar mais de uma.</span>
+          <div class="options">
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Cadastro de membros"> Cadastro de membros</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Controle de visitantes"> Controle de visitantes</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Controle financeiro"> Controle financeiro</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Escalas de ministério"> Escalas de ministério</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Comunicação com membros"> Comunicação com membros</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Gestão de eventos"> Gestão de eventos</label>
+            <label class="inline-option"><input type="checkbox" name="dificuldades" value="Controle de frequência nos cultos"> Controle de frequência nos cultos</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Problemas Enfrentados</legend>
+
+        <div class="question">
+          <label class="title" for="problema">6. Qual é o maior problema administrativo que a igreja enfrenta hoje?</label>
+          <textarea id="problema" name="problema" required></textarea>
+        </div>
+
+        <div class="question">
+          <label class="title">7. Você sente dificuldade em acompanhar o crescimento espiritual e numérico da igreja?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="crescimento" value="Sim" required> Sim</label>
+            <label class="inline-option"><input type="radio" name="crescimento" value="Não"> Não</label>
+            <label class="inline-option"><input type="radio" name="crescimento" value="Às vezes"> Às vezes</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="title">8. A igreja possui algum sistema digital de gestão?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="temSistema" value="Sim" required> Sim</label>
+            <label class="inline-option"><input type="radio" name="temSistema" value="Não"> Não</label>
+          </div>
+        </div>
+
+        <div class="question hidden" id="sistemaAtualBox">
+          <label class="title" for="sistemaAtual">Qual sistema utiliza?</label>
+          <input type="text" id="sistemaAtual" name="sistemaAtual" placeholder="Ex.: ChurchTools, planilha própria, outro sistema" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Funcionalidades Desejadas</legend>
+
+        <div class="question">
+          <label class="title">9. Quais funcionalidades seriam mais úteis em um sistema para igrejas?</label>
+          <span class="hint">Pode marcar várias.</span>
+          <div class="options">
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Cadastro completo de membros"> Cadastro completo de membros</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Controle de visitantes"> Controle de visitantes</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Registro de batismos e decisões"> Registro de batismos e decisões</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Controle de dízimos e ofertas"> Controle de dízimos e ofertas</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Escalas de ministério"> Escalas de ministério</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Controle de frequência nos cultos"> Controle de frequência nos cultos</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Comunicação com membros"> Comunicação com membros</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Aplicativo da igreja"> Aplicativo da igreja</label>
+            <label class="inline-option"><input type="checkbox" name="funcionalidades" value="Gestão de células ou pequenos grupos"> Gestão de células ou pequenos grupos</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>5. Interesse no Sistema</legend>
+
+        <div class="question">
+          <label class="title">10. Se existisse um sistema simples que ajudasse sua igreja com essas funções, você utilizaria?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="usaria" value="Sim" required> Sim</label>
+            <label class="inline-option"><input type="radio" name="usaria" value="Talvez"> Talvez</label>
+            <label class="inline-option"><input type="radio" name="usaria" value="Não"> Não</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="title">11. Quanto a igreja estaria disposta a pagar por mês por um sistema que ajudasse na gestão?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="valor" value="Até R$20" required> Até R$20</label>
+            <label class="inline-option"><input type="radio" name="valor" value="R$20 a R$50"> R$20 a R$50</label>
+            <label class="inline-option"><input type="radio" name="valor" value="R$50 a R$100"> R$50 a R$100</label>
+            <label class="inline-option"><input type="radio" name="valor" value="Mais de R$100"> Mais de R$100</label>
+            <label class="inline-option"><input type="radio" name="valor" value="Preferiria gratuito"> Preferiria gratuito</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>6. Feedback Final</legend>
+
+        <div class="question">
+          <label class="title" for="ideal">12. O que um sistema ideal para igrejas deveria ter obrigatoriamente?</label>
+          <textarea id="ideal" name="ideal"></textarea>
+        </div>
+
+        <div class="question">
+          <label class="title">13. Você gostaria de testar gratuitamente a primeira versão do sistema quando estiver pronta?</label>
+          <div class="options">
+            <label class="inline-option"><input type="radio" name="testeGratis" value="Sim" required> Sim</label>
+            <label class="inline-option"><input type="radio" name="testeGratis" value="Não"> Não</label>
+          </div>
+        </div>
+
+        <div id="contactBox" class="hidden grid-2">
+          <div class="question">
+            <label class="title" for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" />
+          </div>
+          <div class="question">
+            <label class="title" for="igreja">Igreja</label>
+            <input type="text" id="igreja" name="igreja" />
+          </div>
+          <div class="question">
+            <label class="title" for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" />
+          </div>
+          <div class="question">
+            <label class="title" for="whatsapp">WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 99999-9999" />
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary">Enviar pesquisa</button>
+        <button type="reset" class="btn-secondary">Limpar</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <p class="footer-note">
+        Publicação rápida no GitHub Pages: suba este arquivo como <strong>index.html</strong> em um repositório público e ative o GitHub Pages nas configurações do repositório.
+        Para salvar as respostas de verdade, conecte este formulário a um backend como Google Apps Script, Formspree, Supabase ou Firebase.
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const surveyForm = document.getElementById('surveyForm');
+    const statusBox = document.getElementById('status');
+    const contactBox = document.getElementById('contactBox');
+    const sistemaAtualBox = document.getElementById('sistemaAtualBox');
+
+    function toggleConditionalFields() {
+      const testeGratis = document.querySelector('input[name="testeGratis"]:checked')?.value;
+      const temSistema = document.querySelector('input[name="temSistema"]:checked')?.value;
+
+      contactBox.classList.toggle('hidden', testeGratis !== 'Sim');
+      sistemaAtualBox.classList.toggle('hidden', temSistema !== 'Sim');
+    }
+
+    document.addEventListener('change', (event) => {
+      if (event.target.name === 'testeGratis' || event.target.name === 'temSistema') {
+        toggleConditionalFields();
+      }
+    });
+
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+    }
+
+    surveyForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      toggleConditionalFields();
+
+      const data = {
+        cargo: document.querySelector('input[name="cargo"]:checked')?.value || '',
+        membros: document.getElementById('membros').value,
+        multicampus: document.querySelector('input[name="multicampus"]:checked')?.value || '',
+        organizacao: document.querySelector('input[name="organizacao"]:checked')?.value || '',
+        dificuldades: getCheckedValues('dificuldades'),
+        problema: document.getElementById('problema').value.trim(),
+        crescimento: document.querySelector('input[name="crescimento"]:checked')?.value || '',
+        temSistema: document.querySelector('input[name="temSistema"]:checked')?.value || '',
+        sistemaAtual: document.getElementById('sistemaAtual').value.trim(),
+        funcionalidades: getCheckedValues('funcionalidades'),
+        usaria: document.querySelector('input[name="usaria"]:checked')?.value || '',
+        valor: document.querySelector('input[name="valor"]:checked')?.value || '',
+        ideal: document.getElementById('ideal').value.trim(),
+        testeGratis: document.querySelector('input[name="testeGratis"]:checked')?.value || '',
+        nome: document.getElementById('nome').value.trim(),
+        igreja: document.getElementById('igreja').value.trim(),
+        cidade: document.getElementById('cidade').value.trim(),
+        whatsapp: document.getElementById('whatsapp').value.trim(),
+        enviadoEm: new Date().toISOString()
+      };
+
+      // Substitua esta URL pela URL do seu backend quando conectar a um endpoint real.
+      const ENDPOINT = '';
+
+      try {
+        if (!ENDPOINT) {
+          console.log('Dados da pesquisa:', data);
+          statusBox.className = 'status success';
+          statusBox.textContent = 'Formulário validado com sucesso. No momento ele está em modo demonstração e exibindo os dados no console do navegador. O próximo passo é conectar um backend para salvar as respostas.';
+          return;
+        }
+
+        const response = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error('Falha ao enviar a pesquisa.');
+        }
+
+        statusBox.className = 'status success';
+        statusBox.textContent = 'Pesquisa enviada com sucesso. Obrigado pela resposta!';
+        surveyForm.reset();
+        toggleConditionalFields();
+      } catch (error) {
+        statusBox.className = 'status error';
+        statusBox.textContent = 'Não foi possível enviar agora. Verifique a conexão do formulário com o backend e tente novamente.';
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
 
