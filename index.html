@@ -425,88 +425,91 @@
     </form>
   </div>
 
-  <script>
-    const surveyForm = document.getElementById('surveyForm');
-    const statusBox = document.getElementById('status');
-    const contactBox = document.getElementById('contactBox');
-    const sistemaAtualBox = document.getElementById('sistemaAtualBox');
+ <script>
+  const surveyForm = document.getElementById('surveyForm');
+  const statusBox = document.getElementById('status');
+  const contactBox = document.getElementById('contactBox');
+  const sistemaAtualBox = document.getElementById('sistemaAtualBox');
 
-    function toggleConditionalFields() {
-      const testeGratis = document.querySelector('input[name="testeGratis"]:checked')?.value;
-      const temSistema = document.querySelector('input[name="temSistema"]:checked')?.value;
+  function toggleConditionalFields() {
+    const testeGratis = document.querySelector('input[name="testeGratis"]:checked')?.value;
+    const temSistema = document.querySelector('input[name="temSistema"]:checked')?.value;
 
-      contactBox.classList.toggle('hidden', testeGratis !== 'Sim');
-      sistemaAtualBox.classList.toggle('hidden', temSistema !== 'Sim');
+    contactBox.classList.toggle('hidden', testeGratis !== 'Sim');
+    sistemaAtualBox.classList.toggle('hidden', temSistema !== 'Sim');
+  }
+
+  document.addEventListener('change', (event) => {
+    if (event.target.name === 'testeGratis' || event.target.name === 'temSistema') {
+      toggleConditionalFields();
     }
+  });
 
-    document.addEventListener('change', (event) => {
-      if (event.target.name === 'testeGratis' || event.target.name === 'temSistema') {
-        toggleConditionalFields();
+  function getCheckedValues(name) {
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+  }
+
+  surveyForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    toggleConditionalFields();
+
+    const submitButton = surveyForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
+
+    const data = {
+      cargo: document.querySelector('input[name="cargo"]:checked')?.value || '',
+      membros: document.getElementById('membros').value,
+      multicampus: document.querySelector('input[name="multicampus"]:checked')?.value || '',
+      organizacao: document.querySelector('input[name="organizacao"]:checked')?.value || '',
+      dificuldades: getCheckedValues('dificuldades'),
+      problema: document.getElementById('problema').value.trim(),
+      crescimento: document.querySelector('input[name="crescimento"]:checked')?.value || '',
+      temSistema: document.querySelector('input[name="temSistema"]:checked')?.value || '',
+      sistemaAtual: document.getElementById('sistemaAtual').value.trim(),
+      funcionalidades: getCheckedValues('funcionalidades'),
+      usaria: document.querySelector('input[name="usaria"]:checked')?.value || '',
+      valor: document.querySelector('input[name="valor"]:checked')?.value || '',
+      ideal: document.getElementById('ideal').value.trim(),
+      testeGratis: document.querySelector('input[name="testeGratis"]:checked')?.value || '',
+      nome: document.getElementById('nome').value.trim(),
+      igreja: document.getElementById('igreja').value.trim(),
+      cidade: document.getElementById('cidade').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim()
+    };
+
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyCcVcjr-YiPUDVis7mmGMra2MbcKX_T8kFEQFC89dg42rYwBjyU5x7oRSlv4c2445bXg/exec';
+
+    try {
+      const response = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || 'Falha ao salvar.');
       }
-    });
 
-    function getCheckedValues(name) {
-      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
-    }
-
-    surveyForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
+      statusBox.className = 'status success';
+      statusBox.textContent = 'Pesquisa enviada com sucesso. Obrigado pela resposta!';
+      surveyForm.reset();
       toggleConditionalFields();
 
-      const data = {
-        cargo: document.querySelector('input[name="cargo"]:checked')?.value || '',
-        membros: document.getElementById('membros').value,
-        multicampus: document.querySelector('input[name="multicampus"]:checked')?.value || '',
-        organizacao: document.querySelector('input[name="organizacao"]:checked')?.value || '',
-        dificuldades: getCheckedValues('dificuldades'),
-        problema: document.getElementById('problema').value.trim(),
-        crescimento: document.querySelector('input[name="crescimento"]:checked')?.value || '',
-        temSistema: document.querySelector('input[name="temSistema"]:checked')?.value || '',
-        sistemaAtual: document.getElementById('sistemaAtual').value.trim(),
-        funcionalidades: getCheckedValues('funcionalidades'),
-        usaria: document.querySelector('input[name="usaria"]:checked')?.value || '',
-        valor: document.querySelector('input[name="valor"]:checked')?.value || '',
-        ideal: document.getElementById('ideal').value.trim(),
-        testeGratis: document.querySelector('input[name="testeGratis"]:checked')?.value || '',
-        nome: document.getElementById('nome').value.trim(),
-        igreja: document.getElementById('igreja').value.trim(),
-        cidade: document.getElementById('cidade').value.trim(),
-        whatsapp: document.getElementById('whatsapp').value.trim(),
-        enviadoEm: new Date().toISOString()
-      };
-
-      // Substitua esta URL pela URL do seu backend quando conectar a um endpoint real.
-      const ENDPOINT = '';
-
-      try {
-        if (!ENDPOINT) {
-          console.log('Dados da pesquisa:', data);
-          statusBox.className = 'status success';
-          statusBox.textContent = 'Formulário validado com sucesso. No momento ele está em modo demonstração e exibindo os dados no console do navegador. O próximo passo é conectar um backend para salvar as respostas.';
-          return;
-        }
-
-        const response = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-          throw new Error('Falha ao enviar a pesquisa.');
-        }
-
-        statusBox.className = 'status success';
-        statusBox.textContent = 'Pesquisa enviada com sucesso. Obrigado pela resposta!';
-        surveyForm.reset();
-        toggleConditionalFields();
-      } catch (error) {
-        statusBox.className = 'status error';
-        statusBox.textContent = 'Não foi possível enviar agora. Verifique a conexão do formulário com o backend e tente novamente.';
-        console.error(error);
-      }
-    });
-  </script>
+    } catch (error) {
+      console.error(error);
+      statusBox.className = 'status error';
+      statusBox.textContent = 'Não foi possível enviar a pesquisa. Verifique o endpoint do Apps Script e tente novamente.';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Enviar pesquisa';
+    }
+  });
+</script>
 </body>
 </html>
 
